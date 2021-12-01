@@ -13,15 +13,14 @@ const UserSchema = new Schema ({
         require: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]
     },
-    thoughs: [
+    thoughts: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Thoughts'
         }
-    ],
-    //shot in the dark, will have to see if this works
-    friends: [this]
-})
+    ]
+    //need to figure out friends
+});
 
 //TODO: Set up virtual 'friendCount' to retrieve length of users friends array
 

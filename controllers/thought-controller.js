@@ -60,7 +60,7 @@ const thoughtsController = {
         })
         .catch(err=> res.json(err));
     },
-    removeThourhg({params},res) {
+    removeThought({params},res) {
         Thoughts.findOneAndDelete({_id: params.thoughtId})
         .then(deletedThought => {
             if(!deletedThought) {
@@ -81,5 +81,31 @@ const thoughtsController = {
             res.json(dbUserData);
         })
         .catch(err=> rs.json(err));
-    }
+    },
+    addReaction({params, body},res){
+        Thoughts.findOneAndUpdate(
+            {_id: params.thoughtId},
+            {$push: {reaction: body}},
+            {new: true}
+        )
+        .then(dbUserData => {
+            if(!dbUserData){
+                res.status(404).json({message: 'No User with this id found'});
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => res.json(err));
+    },
+    removeReaction({params}, res){
+        Thoughts.findOneAndUpdate(
+            {_id: params.thoughtId},
+            {$pull: {reaction: {reactionId: params.reactionId}}},
+            {new: true}
+        )
+        .then(dbUserData => rs.json(dbUserData))
+        .catch(err => res.json(err));
+    }   
 }
+
+module.exports = thoughtsController;

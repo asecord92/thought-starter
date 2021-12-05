@@ -3,7 +3,7 @@ const {Schema, model} = require('mongoose');
 const UserSchema = new Schema ({
 
     //TODO figure out how unique works
-    userName: {
+    username: {
         type: String,
         required: true,
         trim: true

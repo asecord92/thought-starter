@@ -8,6 +8,11 @@ const userController = {
             select:'-__v'
         })
         .sort({_id:-1})
+        .populate({
+            path: 'friends',
+            select:'-__v'
+        })
+        .sort({_id:-1})
         .then(dbUserData => res.json(dbUserData))
         .catch(err =>{
             console.log(err);
@@ -20,6 +25,11 @@ const userController = {
             path: 'thoughts',
             select:'-__v'
         })
+        .populate({
+            path: 'friends',
+            select:'-__v'
+        })
+        .sort({_id:-1})
         .then(dbUserData => {
             if(!dbUserData){
                 res.status(404).json({message: 'This user does not exist!'})
@@ -58,7 +68,34 @@ const userController = {
             res.json(dbUserData);
         })
         .catch(err=> res.json(err));
-    }
+    },
+    addFriend({params,body}, res){
+        User.findOneAndUpdate(
+        {_id: params.id},
+        { $push: {friends: body}},
+        {new: true}
+        )
+        .then(dbThoughtData => {
+        if (!dbThoughtData){
+            res.status(404).json({message: 'This user does not exist!'});
+            return;
+        }
+        res.json(dbThoughtData)
+        })
+        .catch(err => {
+        console.log(err);
+        res.status(400).json(err);
+        })
+    },
+    removeFriend({params}, res){
+        User.findOneAndUpdate(
+            {_id: params.id},
+            {$pull: {friends: params.friendId}},
+            {new: true}
+        )
+        .then(dbUserData => res.json(dbUserData))
+        .catch(err => res.json(err));
+    }   
 };
 
 module.exports = userController;

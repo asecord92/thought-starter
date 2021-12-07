@@ -22,7 +22,14 @@ const ReactionSchema = new Schema({
         get: (createdAtVal) => formatDate(createdAtVal)
         //add getter
     }
-})
+},
+{
+    toJSON: {
+        getters: true
+    },
+    id: false
+}
+)
 
 const ThoughtsSchema = new Schema({
     thoughtText: {
